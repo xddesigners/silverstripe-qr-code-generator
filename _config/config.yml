@@ -1,0 +1,18 @@
+---
+Name: qr-code-generator
+---
+SilverStripe\SiteConfig\SiteConfig:
+  extensions:
+    - XD\QRCodeGenerator\Extensions\SiteConfigExtension
+SilverStripe\Forms\GridField\GridFieldDetailForm_ItemRequest:
+  extensions:
+    - XD\QRCodeGenerator\Extensions\GridFieldDetailForm_ItemRequestExtension
+SilverStripe\Admin\LeftAndMain:
+  extra_requirements_javascript:
+    - 'qrcodegenerator/js/admin.js'
+SilverStripe\Control\Director:
+  rules:
+    'qrcode/$ID': XD\QRCodeGenerator\Controllers\QRCodeController
+#SilverStripe\CMS\Model\SiteTree:
+#  extensions:
+#    - XD\QRCodeGenerator\Extensions\SiteTreeExtension
