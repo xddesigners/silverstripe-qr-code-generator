@@ -1,0 +1,27 @@
+{
+  "name": "xddesigners/silverstripe-qr-code-generator",
+  "description": "Create QR codes with inserted logo and redirection in the CMS",
+  "type": "silverstripe-vendormodule",
+  "keywords": [
+    "silverstripe",
+    "CMS",
+    "QR",
+    "qrcode"
+  ],
+  "license": "BSD-3-Clause",
+  "require": {
+    "chillerlan/php-qrcode": "^3.4"
+  },
+  "autoload": {
+    "psr-4": {
+      "XD\\QRCodeGenerator\\": "src/"
+    }
+  },
+  "extra": {
+    "expose": [
+      "js"
+    ]
+  },
+  "minimum-stability": "dev",
+  "prefer-stable": true
+}

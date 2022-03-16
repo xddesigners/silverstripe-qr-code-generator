@@ -9,7 +9,7 @@ SilverStripe\Forms\GridField\GridFieldDetailForm_ItemRequest:
     - XD\QRCodeGenerator\Extensions\GridFieldDetailForm_ItemRequestExtension
 SilverStripe\Admin\LeftAndMain:
   extra_requirements_javascript:
-    - 'qrcodegenerator/js/admin.js'
+    - 'xddesigners/silverstripe-qr-code-generator:js/admin.js'
 SilverStripe\Control\Director:
   rules:
     'qrcode/$ID': XD\QRCodeGenerator\Controllers\QRCodeController
