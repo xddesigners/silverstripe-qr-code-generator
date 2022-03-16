@@ -9,7 +9,7 @@ class QRCodeController extends Controller
 {
 
     private static $url_handlers = [
-        'qrcode/$*' => 'index',
+        'qr/$*' => 'index',
     ];
 
     private static $allowed_actions = [

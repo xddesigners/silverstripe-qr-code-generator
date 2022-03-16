@@ -12,7 +12,7 @@ SilverStripe\Admin\LeftAndMain:
     - 'xddesigners/silverstripe-qr-code-generator:js/admin.js'
 SilverStripe\Control\Director:
   rules:
-    'qrcode/$ID': XD\QRCodeGenerator\Controllers\QRCodeController
+    'qr/$ID': XD\QRCodeGenerator\Controllers\QRCodeController
 #SilverStripe\CMS\Model\SiteTree:
 #  extensions:
 #    - XD\QRCodeGenerator\Extensions\SiteTreeExtension

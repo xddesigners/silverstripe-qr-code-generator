@@ -82,7 +82,7 @@ class QRCode extends DataObject
 
     public function getQRLink()
     {
-        return Director::absoluteBaseURL() . 'qrcode/' . $this->ID;
+        return Director::absoluteBaseURL() . 'qr/' . $this->ID;
     }
 
     public function getLink()
