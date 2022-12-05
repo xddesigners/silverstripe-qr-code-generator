@@ -64,22 +64,6 @@ class QRCode extends DataObject
         return $fields;
     }
 
-    public function redirect()
-    {
-
-    }
-
-    public function getCMSActions()
-    {
-        $actions = parent::getCMSActions();
-
-        $actions->add(
-            new FormAction('DownloadQRCode', _t(__CLASS__ . '.DownloadQRImage', 'Download QR image'))
-        );
-
-        return $actions;
-    }
-
     public function getQRLink()
     {
         return Director::absoluteBaseURL() . 'qr/' . $this->ID;
