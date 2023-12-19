@@ -7,7 +7,6 @@ use SilverStripe\Assets\Image;
 use SilverStripe\CMS\Model\SiteTree;
 use SilverStripe\Control\Director;
 use SilverStripe\Core\Config\Config;
-use SilverStripe\Dev\Debug;
 use SilverStripe\Forms\Form_FieldMap;
 use SilverStripe\Forms\FormAction;
 use SilverStripe\Forms\LiteralField;
