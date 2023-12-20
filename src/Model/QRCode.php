@@ -6,6 +6,7 @@ use chillerlan\QRCode\QROptions;
 use SilverStripe\Assets\Image;
 use SilverStripe\CMS\Model\SiteTree;
 use SilverStripe\Control\Director;
+use SilverStripe\Core\Config\Config;
 use SilverStripe\Forms\Form_FieldMap;
 use SilverStripe\Forms\FormAction;
 use SilverStripe\Forms\LiteralField;
@@ -66,6 +67,9 @@ class QRCode extends DataObject
 
     public function getQRLink()
     {
+        if(Config::inst()->get(QRCode::class, 'add_slash_on_qr_link')) {
+            return Director::absoluteBaseURL() . '/qr/' . $this->ID;
+        }
         return Director::absoluteBaseURL() . 'qr/' . $this->ID;
     }
 
@@ -172,7 +176,11 @@ class QRCode extends DataObject
                 (new \chillerlan\QRCode\QRCode($options))->getMatrix($this->getQRLink())
             );
 
-            $logoFile = Director::baseFolder() . '/assets/' . $logo->getFilename();
+            if(Config::inst()->get(QRCode::class, 'use_public_assets')) {
+                $logoFile = Director::publicFolder() . '/assets/' . $logo->getFilename();
+            } else {
+                $logoFile = Director::baseFolder() . '/assets/' . $logo->getFilename();
+            }
 
             $qrcode = $qrOutputInterface->dump(
                 $file,
