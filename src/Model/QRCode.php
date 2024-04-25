@@ -5,6 +5,7 @@ namespace XD\QRCodeGenerator\Models;
 use chillerlan\QRCode\QROptions;
 use SilverStripe\Assets\Image;
 use SilverStripe\CMS\Model\SiteTree;
+use SilverStripe\Control\Controller;
 use SilverStripe\Control\Director;
 use SilverStripe\Core\Config\Config;
 use SilverStripe\Forms\Form_FieldMap;
