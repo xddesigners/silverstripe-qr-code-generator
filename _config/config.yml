@@ -17,5 +17,4 @@ SilverStripe\Control\Director:
 #  extensions:
 #    - XD\QRCodeGenerator\Extensions\SiteTreeExtension
 XD\QRCodeGenerator\Models\QRCode:
-  add_slash_on_qr_link: true
   use_public_assets: true
