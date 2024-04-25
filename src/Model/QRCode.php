@@ -67,10 +67,7 @@ class QRCode extends DataObject
 
     public function getQRLink()
     {
-        if(Config::inst()->get(QRCode::class, 'add_slash_on_qr_link')) {
-            return Director::absoluteBaseURL() . '/qr/' . $this->ID;
-        }
-        return Director::absoluteBaseURL() . 'qr/' . $this->ID;
+        return Controller::join_links(Director::absoluteBaseURL(),'qr/' . $this->ID);
     }
 
     public function getLink()
