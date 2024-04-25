@@ -16,5 +16,4 @@ SilverStripe\Control\Director:
 #SilverStripe\CMS\Model\SiteTree:
 #  extensions:
 #    - XD\QRCodeGenerator\Extensions\SiteTreeExtension
-XD\QRCodeGenerator\Models\QRCode:
-  use_public_assets: true
+
