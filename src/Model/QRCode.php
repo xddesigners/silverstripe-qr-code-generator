@@ -173,7 +173,7 @@ class QRCode extends DataObject
                 (new \chillerlan\QRCode\QRCode($options))->getMatrix($this->getQRLink())
             );
 
-            if(Config::inst()->get(QRCode::class, 'use_public_assets')) {
+            if (Director::publicDir()) {
                 $logoFile = Director::publicFolder() . '/assets/' . $logo->getFilename();
             } else {
                 $logoFile = Director::baseFolder() . '/assets/' . $logo->getFilename();
