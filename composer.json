@@ -1,16 +1,29 @@
 {
   "name": "xddesigners/silverstripe-qr-code-generator",
-  "description": "Create QR codes with inserted logo and redirection in the CMS",
+  "description": "Create QR codes with an embedded logo and short redirect URLs, managed in the SilverStripe CMS.",
   "type": "silverstripe-vendormodule",
   "keywords": [
     "silverstripe",
-    "CMS",
-    "QR",
-    "qrcode"
+    "cms",
+    "qr",
+    "qrcode",
+    "qr-code"
   ],
   "license": "BSD-3-Clause",
+  "authors": [
+    {
+      "name": "Remy Vaartjes",
+      "email": "remy@xd.nl"
+    }
+  ],
   "require": {
-    "chillerlan/php-qrcode": "^3.4"
+    "php": "^8.3",
+    "silverstripe/framework": "^6.0",
+    "silverstripe/cms": "^6.0",
+    "silverstripe/admin": "^3.0",
+    "silverstripe/siteconfig": "^6.0",
+    "silverstripe/asset-admin": "^3.0",
+    "chillerlan/php-qrcode": "^4.4"
   },
   "autoload": {
     "psr-4": {
@@ -20,7 +33,10 @@
   "extra": {
     "expose": [
       "js"
-    ]
+    ],
+    "branch-alias": {
+      "dev-main": "6.x-dev"
+    }
   },
   "minimum-stability": "dev",
   "prefer-stable": true

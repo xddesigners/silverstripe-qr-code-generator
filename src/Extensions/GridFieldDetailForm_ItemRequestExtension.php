@@ -7,10 +7,12 @@ use SilverStripe\Forms\FieldList;
 use SilverStripe\Forms\GridField\GridFieldDetailForm_ItemRequest;
 use SilverStripe\Forms\LiteralField;
 use SilverStripe\View\HTML;
+use SilverStripe\View\Requirements;
 use XD\QRCodeGenerator\Models\QRCode;
 
 /**
- * Class SiteConfigExtension
+ * Adds a "Download QR image" action to the QRCode edit form.
+ *
  * @package XD\QRCodeGenerator\Extensions
  * @property GridFieldDetailForm_ItemRequest|GridFieldDetailForm_ItemRequestExtension $owner
  */
@@ -20,6 +22,18 @@ class GridFieldDetailForm_ItemRequestExtension extends Extension
     private static $allowed_actions = [
         'downloadQRImage'
     ];
+
+    /**
+     * The download action is an <a> (needed for the no-ajax download). The admin
+     * styles .btn-toolbar anchors with the link colour, which overrides btn-info's
+     * white text and makes it blue-on-blue. Force white so it reads as a normal button.
+     */
+    private const DOWNLOAD_BUTTON_CSS = <<<'CSS'
+.cms .btn-toolbar a.btn-info,
+.cms .btn-toolbar a.btn-info:hover,
+.cms .btn-toolbar a.btn-info:focus,
+.cms .btn-toolbar a.btn-info:active { color: #fff !important; }
+CSS;
 
     public function updateFormActions(FieldList $actions)
     {
@@ -31,9 +45,11 @@ class GridFieldDetailForm_ItemRequestExtension extends Extension
         }
 
         if ($record instanceof QRCode) {
+            Requirements::customCSS(self::DOWNLOAD_BUTTON_CSS, 'xd-qr-download-button');
+
             $classes = [
                 "btn",
-                "btn-outline-dark",
+                "btn-info",
                 "font-icon-p-download",
                 "no-ajax" // Class to disable ajax
             ];

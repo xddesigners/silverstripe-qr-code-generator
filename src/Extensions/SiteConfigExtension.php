@@ -4,9 +4,9 @@ namespace XD\QRCodeGenerator\Extensions;
 
 use SilverStripe\AssetAdmin\Forms\UploadField;
 use SilverStripe\Assets\Image;
+use SilverStripe\Core\Extension;
 use SilverStripe\Forms\CheckboxField;
 use SilverStripe\Forms\FieldList;
-use SilverStripe\ORM\DataExtension;
 use SilverStripe\SiteConfig\SiteConfig;
 
 /**
@@ -15,7 +15,7 @@ use SilverStripe\SiteConfig\SiteConfig;
  * @property SiteConfig|SiteConfigExtension $owner
  * @method Image QRCodeLogo
  */
-class SiteConfigExtension extends DataExtension{
+class SiteConfigExtension extends Extension{
 
     private static $db = [
         'QRCodeShowLogo' => 'Boolean',
@@ -29,10 +29,8 @@ class SiteConfigExtension extends DataExtension{
         'QRCodeLogo'
     ];
 
-    public function updateCMSFields(FieldList $fields)
+    protected function updateCMSFields(FieldList $fields)
     {
-        parent::updateCMSFields($fields);
-
         $fields->addFieldsToTab(
             'Root.QrCodeSettings',
             [
@@ -40,9 +38,6 @@ class SiteConfigExtension extends DataExtension{
                 UploadField::create('QRCodeLogo',_t(__CLASS__.'.QRCodeLogo','QRCode logo'))
             ]
         );
-
-
-
     }
 
 }

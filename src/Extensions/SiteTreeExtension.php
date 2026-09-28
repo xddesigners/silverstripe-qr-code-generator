@@ -7,9 +7,9 @@ use chillerlan\QRCode\QROptions;
 use SilverStripe\Assets\Image;
 use SilverStripe\CMS\Model\SiteTree;
 use SilverStripe\Control\Director;
+use SilverStripe\Core\Extension;
 use SilverStripe\Forms\FieldList;
 use SilverStripe\Forms\LiteralField;
-use SilverStripe\ORM\DataExtension;
 use SilverStripe\SiteConfig\SiteConfig;
 use XD\QRCodeGenerator\Image\QRImageWithLogo;
 use XD\QRCodeGenerator\Options\LogoOptions;
@@ -19,20 +19,18 @@ use XD\QRCodeGenerator\Options\LogoOptions;
  * @package XD\QRCodeGenerator
  * @property SiteTree|SiteTreeExtension $owner
  */
-class SiteTreeExtension extends DataExtension{
+class SiteTreeExtension extends Extension{
 
     private static $has_one = [
-        'QRCode' => 'Image'
+        'QRCode' => Image::class
     ];
 
     private static $owns = [
         'QRCode'
     ];
 
-    public function updateCMSFields(FieldList $fields)
+    protected function updateCMSFields(FieldList $fields)
     {
-        parent::updateCMSFields($fields);
-
         $link = $this->generateQRCode();
 
         $fields->addFieldsToTab('Root.QRCode',[
@@ -63,7 +61,11 @@ class SiteTreeExtension extends DataExtension{
                 (new QRCode($options))->getMatrix($this->owner->AbsoluteLink())
             );
 
-            $logoFile = Director::baseFolder() . '/assets/' . $logo->getFilename();
+            if (Director::publicDir()) {
+                $logoFile = Director::publicFolder() . '/assets/' . $logo->getFilename();
+            } else {
+                $logoFile = Director::baseFolder() . '/assets/' . $logo->getFilename();
+            }
 
             $qrcode = $qrOutputInterface->dump(
                 null,
