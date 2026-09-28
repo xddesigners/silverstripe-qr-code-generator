@@ -33,6 +33,8 @@ class GridFieldDetailForm_ItemRequestExtension extends Extension
 .cms .btn-toolbar a.btn-info:hover,
 .cms .btn-toolbar a.btn-info:focus,
 .cms .btn-toolbar a.btn-info:active { color: #fff !important; }
+/* Replace the right group's auto-margin with a small fixed gap so the ms-auto download button sits just left of the prev/next controls. */
+.cms .btn-toolbar .composite.ms-auto { margin-left: 1rem !important; }
 CSS;
 
     public function updateFormActions(FieldList $actions)
