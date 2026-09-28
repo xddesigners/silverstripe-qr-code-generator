@@ -50,6 +50,7 @@ CSS;
             $classes = [
                 "btn",
                 "btn-info",
+                "ms-auto", // push the button to the right side of the toolbar
                 "font-icon-p-download",
                 "no-ajax" // Class to disable ajax
             ];

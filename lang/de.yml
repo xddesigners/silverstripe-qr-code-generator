@@ -1,0 +1,15 @@
+de:
+  XD\QRCodeGenerator\Admin\QRCodeAdmin:
+    MENUTITLE: "QR-Codes"
+  XD\QRCodeGenerator\Models\QRCode:
+    SINGULARNAME: "QR-Code"
+    PLURALNAME: "QR-Codes"
+    db_Title: "Titel"
+    InternalLink: "Interner Link"
+    ExternalLink: "Externer Link"
+  XD\QRCodeGenerator\Extensions\SiteConfigExtension:
+    QRCodeShowLogo: "QR-Code mit Logo anzeigen"
+    QRCodeLogo: "QR-Code-Logo"
+    QRCodeLogoDesc: "Nur PNG. Ein quadratisches Logo funktioniert am besten."
+  XD\QRCodeGenerator\Extensions\GridFieldDetailForm_ItemRequestExtension:
+    DownloadQRImage: "QR-Bild herunterladen"
