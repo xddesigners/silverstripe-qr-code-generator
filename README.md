@@ -1,16 +1,19 @@
 # SilverStripe QR Code Generator
 
 Create QR codes in the SilverStripe CMS that point at a short, stable redirect URL
-(`/qr/{id}`) instead of the destination directly. Because the QR encodes the redirect
-URL, you can repoint it to another page or external link **without reprinting the code**.
-Optionally embeds a logo (from Site Settings) in the centre of the code.
+instead of the destination directly. Because the QR encodes the redirect URL, you can
+repoint it to another page or external link **without reprinting the code**. Redirect
+URLs use a non-guessable token by default (`/qr/{token}`), and a logo (from Site
+Settings) can be embedded in the centre of the code.
 
 ## Features
 
 - Manage QR codes in their own **QR Codes** admin section.
 - Point each code at an **internal page** (tree dropdown) or an **external URL**.
-- Codes encode a permanent short URL (`/qr/{id}`) that `301`-redirects to the target,
-  so the printed code keeps working when the destination changes.
+- Codes encode a permanent short redirect URL that `301`-redirects to the target, so the
+  printed code keeps working when the destination changes.
+- Redirect URLs use a **non-guessable token** by default (`/qr/{token}`) so they can't be
+  enumerated; switchable to sequential IDs (`/qr/{id}`) for sites with legacy printed codes.
 - Optional **logo** embedded in the middle of the code, configured once in Site Settings.
 - **Download** the generated code from the edit form (PNG when a logo is used, SVG otherwise).
 - Optional **per-page QR code** on every `SiteTree` page (off by default).
@@ -45,8 +48,9 @@ vendor/bin/sake db:build --flush
 3. Save. A preview of the code appears on the edit form, linking to its redirect URL.
 4. Use **Download QR image** to save the file (PNG with a logo, otherwise SVG).
 
-The code encodes `https://your-site/qr/{id}`. Visiting that URL `301`-redirects to the
-current target, so you can change the destination later without reprinting.
+Each code encodes a short redirect URL — by default a non-guessable token
+(`https://your-site/qr/{token}`) — that `301`-redirects to the current target, so you can
+change the destination later without reprinting. See **QR URLs: token vs. ID** below.
 
 ### 2. Add a logo (optional)
 
@@ -76,7 +80,7 @@ Run `dev/build?flush=all` afterwards.
 | Piece | Responsibility |
 | --- | --- |
 | `XD\QRCodeGenerator\Models\QRCode` | The QR code record (title, internal/external link) and image generation. |
-| `XD\QRCodeGenerator\Controllers\QRCodeController` | Handles `/qr/{id}` and `301`-redirects to the target. |
+| `XD\QRCodeGenerator\Controllers\QRCodeController` | Handles `/qr/{token}` (or `/qr/{id}` in legacy mode) and `301`-redirects to the target. |
 | `XD\QRCodeGenerator\Admin\QRCodeAdmin` | The **QR Codes** CMS section. |
 | `SiteConfigExtension` | Adds the logo on/off toggle and logo upload to Site Settings. |
 | `SiteTreeExtension` | Optional per-page QR code (disabled by default). |
