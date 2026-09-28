@@ -8,6 +8,7 @@ nl:
     InternalLink: "Interne link"
     ExternalLink: "Externe link"
     DownloadQRImage: "QR-afbeelding downloaden"
+    QRLink: "QR-link"
   XD\QRCodeGenerator\Extensions\SiteConfigExtension:
     QRCodeShowLogo: "QR-code met logo tonen"
     QRCodeLogo: "QR-code logo"

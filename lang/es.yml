@@ -8,6 +8,7 @@ es:
     InternalLink: "Enlace interno"
     ExternalLink: "Enlace externo"
     DownloadQRImage: "Descargar imagen QR"
+    QRLink: "Enlace QR"
   XD\QRCodeGenerator\Extensions\SiteConfigExtension:
     QRCodeShowLogo: "Mostrar código QR con logo"
     QRCodeLogo: "Logo del código QR"

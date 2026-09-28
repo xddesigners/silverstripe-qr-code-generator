@@ -10,6 +10,7 @@ use SilverStripe\Control\Controller;
 use SilverStripe\Control\Director;
 use SilverStripe\Control\HTTPResponse;
 use SilverStripe\Forms\LiteralField;
+use SilverStripe\Forms\ReadonlyField;
 use SilverStripe\Forms\TextField;
 use SilverStripe\Forms\TreeDropdownField;
 use SilverStripe\ORM\DataObject;
@@ -79,6 +80,7 @@ class QRCode extends DataObject
             $fields->addFieldsToTab(
                 'Root.Main',
                 [
+                    ReadonlyField::create('QRLinkDisplay', _t(__CLASS__ . '.QRLink', 'QR link'), $this->getQRLink()),
                     LiteralField::create('QRCode', '<a href="' . $this->getQRLink() . '" target="_blank"><img src="' . $qrCode . '" alt="QR Code" width="500" height="500"><p style="padding-left:3rem;"></a>')
                 ]
             );
@@ -285,10 +287,14 @@ class QRCode extends DataObject
     {
         parent::requireDefaultRecords();
 
+        // Backfill tokens for records created before the Token field existed
+        // (the column may be NULL or '' on those rows, so check the value in PHP).
         $count = 0;
-        foreach (QRCode::get()->filter('Token', '') as $qr) {
-            $qr->write(); // onBeforeWrite generates the token
-            $count++;
+        foreach (QRCode::get() as $qr) {
+            if (!$qr->Token) {
+                $qr->write(); // onBeforeWrite generates the token
+                $count++;
+            }
         }
 
         if ($count > 0) {
