@@ -82,6 +82,19 @@ Run `dev/build?flush=all` afterwards.
 | `SiteTreeExtension` | Optional per-page QR code (disabled by default). |
 | `Image\QRImageWithLogo` | Composites the logo into the centre of the code. |
 
+## Translations
+
+All CMS field labels, buttons and the admin menu are translatable via SilverStripe's i18n system (`lang/*.yml`). The module ships with:
+
+- 🇬🇧 English (`en`)
+- 🇳🇱 Dutch (`nl`)
+- 🇩🇪 German (`de`)
+- 🇮🇹 Italian (`it`)
+- 🇪🇸 Spanish (`es`)
+- 🇫🇷 French (`fr`)
+
+Add another language by dropping a matching `lang/<locale>.yml` into the module (or your project).
+
 ## License
 
 BSD-3-Clause. See [LICENSE](LICENSE).
