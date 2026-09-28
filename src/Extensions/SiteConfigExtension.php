@@ -31,11 +31,16 @@ class SiteConfigExtension extends Extension{
 
     protected function updateCMSFields(FieldList $fields)
     {
+        $logoField = UploadField::create('QRCodeLogo', _t(__CLASS__ . '.QRCodeLogo', 'QRCode logo'));
+        // The logo is composited with imagecreatefrompng(), so only PNG is supported.
+        $logoField->getValidator()->setAllowedExtensions(['png']);
+        $logoField->setDescription(_t(__CLASS__ . '.QRCodeLogoDesc', 'PNG only. A square logo works best.'));
+
         $fields->addFieldsToTab(
             'Root.QrCodeSettings',
             [
                 CheckboxField::create('QRCodeShowLogo',_t(__CLASS__.'.QRCodeShowLogo','Show QR Code with logo')),
-                UploadField::create('QRCodeLogo',_t(__CLASS__.'.QRCodeLogo','QRCode logo'))
+                $logoField
             ]
         );
     }

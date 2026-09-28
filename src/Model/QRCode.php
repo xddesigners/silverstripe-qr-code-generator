@@ -7,6 +7,7 @@ use SilverStripe\Assets\Image;
 use SilverStripe\CMS\Model\SiteTree;
 use SilverStripe\Control\Controller;
 use SilverStripe\Control\Director;
+use SilverStripe\Control\HTTPResponse;
 use SilverStripe\Forms\LiteralField;
 use SilverStripe\Forms\TextField;
 use SilverStripe\Forms\TreeDropdownField;
@@ -104,24 +105,23 @@ class QRCode extends DataObject
         return false;
     }
 
-    public function downloadFile()
+    public function downloadFile(): HTTPResponse
     {
         $filename = $this->getFileName();
-        $mime = 'application/octet-stream'; // force download
-        $tmp = '/tmp/' . $filename;
 
-        ob_clean();
-        header('Content-Type: ' . $mime);
-        header('Content-Disposition: attachment;filename="' . $filename . '"');
-        header('Cache-Control: max-age=0');
-
+        // Write to a unique temp file (not a predictable /tmp/<name>), read it back,
+        // and return a proper HTTPResponse instead of raw header()/exit.
+        $tmp = tempnam(sys_get_temp_dir(), 'qrcode');
         $this->generateQRCode($tmp);
-        $fp = fopen($tmp, 'rb');
-        fpassthru($fp);
-        fclose($fp);
+        $data = file_get_contents($tmp);
         unlink($tmp);
-        exit;
 
+        $response = HTTPResponse::create($data);
+        $response->addHeader('Content-Type', 'application/octet-stream'); // force download
+        $response->addHeader('Content-Disposition', 'attachment; filename="' . $filename . '"');
+        $response->addHeader('Cache-Control', 'max-age=0');
+
+        return $response;
     }
 
     /**

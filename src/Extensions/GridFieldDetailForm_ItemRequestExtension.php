@@ -73,7 +73,7 @@ CSS;
     {
         /* @var QRCode $QRCode */
         $QRCode = $this->owner->getRecord();
-        $QRCode->downloadFile();
+        return $QRCode->downloadFile();
     }
 
 
