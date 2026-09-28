@@ -19,8 +19,13 @@ class QRCodeController extends Controller
     public function index()
     {
         $params = $this->getURLParams();
-        if ($id = $params['ID']) {
-            if ($qr = QRCode::get()->byID($id)) {
+        if ($key = $params['ID'] ?? null) {
+            // Token mode resolves by token only (non-enumerable); legacy mode by ID.
+            $qr = QRCode::config()->get('use_token')
+                ? QRCode::get()->find('Token', $key)
+                : QRCode::get()->byID($key);
+
+            if ($qr) {
                 return $this->redirect($qr->getLink(), 301);
             }
         }

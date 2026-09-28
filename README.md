@@ -82,6 +82,28 @@ Run `dev/build?flush=all` afterwards.
 | `SiteTreeExtension` | Optional per-page QR code (disabled by default). |
 | `Image\QRImageWithLogo` | Composites the logo into the centre of the code. |
 
+## QR URLs: token vs. ID
+
+Each QR encodes a short redirect URL. By default the module uses an opaque,
+non-guessable **token** — `/qr/{token}` — so the URLs can't be enumerated (nobody can
+walk `/qr/1`, `/qr/2`, … to harvest every destination or find not-yet-distributed codes).
+
+```yaml
+XD\QRCodeGenerator\Models\QRCode:
+  use_token: true      # default — non-enumerable /qr/{token}
+  # token_length: 8    # base62; keep it short so the QR stays easy to scan
+```
+
+**Upgrading a site that already printed ID-based codes?** Those encode `/qr/{id}` and
+token mode resolves tokens only, so switch back to legacy ID URLs:
+
+```yaml
+XD\QRCodeGenerator\Models\QRCode:
+  use_token: false
+```
+
+Tokens are generated automatically and backfilled for existing records on `dev/build`.
+
 ## Translations
 
 All CMS field labels, buttons and the admin menu are translatable via SilverStripe's i18n system (`lang/*.yml`). The module ships with:

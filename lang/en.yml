@@ -7,9 +7,8 @@ en:
     db_Title: "Title"
     InternalLink: "Internal link"
     ExternalLink: "External link"
+    DownloadQRImage: "Download QR image"
   XD\QRCodeGenerator\Extensions\SiteConfigExtension:
     QRCodeShowLogo: "Show QR Code with logo"
     QRCodeLogo: "QR Code logo"
     QRCodeLogoDesc: "PNG only. A square logo works best."
-  XD\QRCodeGenerator\Extensions\GridFieldDetailForm_ItemRequestExtension:
-    DownloadQRImage: "Download QR image"

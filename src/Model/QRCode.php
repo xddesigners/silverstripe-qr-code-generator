@@ -3,6 +3,7 @@
 namespace XD\QRCodeGenerator\Models;
 
 use chillerlan\QRCode\QROptions;
+use LeKoala\CmsActions\CustomLink;
 use SilverStripe\Assets\Image;
 use SilverStripe\CMS\Model\SiteTree;
 use SilverStripe\Control\Controller;
@@ -12,6 +13,7 @@ use SilverStripe\Forms\LiteralField;
 use SilverStripe\Forms\TextField;
 use SilverStripe\Forms\TreeDropdownField;
 use SilverStripe\ORM\DataObject;
+use SilverStripe\ORM\DB;
 use SilverStripe\SiteConfig\SiteConfig;
 use SilverStripe\View\Parsers\URLSegmentFilter;
 use XD\QRCodeGenerator\Image\QRImageWithLogo;
@@ -31,17 +33,38 @@ class QRCode extends DataObject
 
     private static $db = [
         'Title' => 'Varchar',
-        'ExternalLink' => 'Varchar'
+        'ExternalLink' => 'Varchar',
+        'Token' => 'Varchar(16)'
     ];
 
     private static $has_one = [
         'InternalLink' => SiteTree::class
     ];
 
+    private static $indexes = [
+        'Token' => true, // non-unique: lookup speed; uniqueness enforced in generateToken()
+    ];
+
+    /**
+     * Use an opaque, non-guessable token in the QR URL (/qr/<token>) instead of the
+     * sequential record ID (/qr/<id>). On by default so new sites get non-enumerable
+     * URLs. Sites that have already PRINTED ID-based codes must opt out to keep them
+     * working (token mode resolves tokens only):
+     *   XD\QRCodeGenerator\Models\QRCode:
+     *     use_token: false
+     */
+    private static $use_token = true;
+
+    /**
+     * Length of the generated base62 token. Keep it short — a longer URL makes the
+     * QR denser/harder to scan. 8 chars ≈ 2.2e14 combinations.
+     */
+    private static $token_length = 8;
+
     public function getCMSFields()
     {
         $fields = parent::getCMSFields();
-        $fields->removeByName(['InternalLinkID', 'ExternalLink']);
+        $fields->removeByName(['InternalLinkID', 'ExternalLink', 'Token']);
 
         $fields->addFieldsToTab(
             'Root.Main',
@@ -64,9 +87,29 @@ class QRCode extends DataObject
         return $fields;
     }
 
+    /**
+     * Add a "Download QR image" button to the edit form via silverstripe-cms-actions.
+     * CustomLink routes to downloadFile() on this record; setNoAjax so the browser
+     * navigates to the streamed file (a normal download) rather than an AJAX call.
+     */
+    public function getCMSActions()
+    {
+        $actions = parent::getCMSActions();
+
+        if ($this->getLink()) {
+            $download = CustomLink::create('downloadFile', _t(__CLASS__ . '.DownloadQRImage', 'Download QR image'));
+            $download->setNoAjax(true);
+            $download->setButtonIcon('export');
+            $actions->push($download);
+        }
+
+        return $actions;
+    }
+
     public function getQRLink()
     {
-        return Controller::join_links(Director::absoluteBaseURL(),'qr/' . $this->ID);
+        $segment = ($this->config()->get('use_token') && $this->Token) ? $this->Token : $this->ID;
+        return Controller::join_links(Director::absoluteBaseURL(), 'qr/' . $segment);
     }
 
     public function getLink()
@@ -210,6 +253,46 @@ class QRCode extends DataObject
             if ($this->InternalLinkID) {
                 $this->Title = $this->InternalLink()->MenuTitle;
             }
+        }
+        if (!$this->Token) {
+            $this->Token = $this->generateToken();
+        }
+    }
+
+    /**
+     * Generate a unique, non-guessable base62 token of the configured length.
+     */
+    protected function generateToken(): string
+    {
+        $alphabet = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
+        $max = strlen($alphabet) - 1;
+        $length = max(4, (int) $this->config()->get('token_length'));
+
+        do {
+            $token = '';
+            for ($i = 0; $i < $length; $i++) {
+                $token .= $alphabet[random_int(0, $max)];
+            }
+        } while (QRCode::get()->filter('Token', $token)->exclude('ID', (int) $this->ID)->exists());
+
+        return $token;
+    }
+
+    /**
+     * Backfill tokens for records created before the Token field existed.
+     */
+    public function requireDefaultRecords()
+    {
+        parent::requireDefaultRecords();
+
+        $count = 0;
+        foreach (QRCode::get()->filter('Token', '') as $qr) {
+            $qr->write(); // onBeforeWrite generates the token
+            $count++;
+        }
+
+        if ($count > 0) {
+            DB::alteration_message("Generated tokens for {$count} QRCode record(s)", 'changed');
         }
     }
 

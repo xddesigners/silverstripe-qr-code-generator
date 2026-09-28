@@ -23,7 +23,8 @@
     "silverstripe/admin": "^3.0",
     "silverstripe/siteconfig": "^6.0",
     "silverstripe/asset-admin": "^3.0",
-    "chillerlan/php-qrcode": "^4.4"
+    "chillerlan/php-qrcode": "^4.4",
+    "lekoala/silverstripe-cms-actions": "^2.0"
   },
   "autoload": {
     "psr-4": {
@@ -31,9 +32,6 @@
     }
   },
   "extra": {
-    "expose": [
-      "js"
-    ],
     "branch-alias": {
       "dev-main": "6.x-dev"
     }
